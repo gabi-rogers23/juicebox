@@ -51,6 +51,19 @@ async function getAllUsers() {
   return rows;
 }
 
+async function getAllTags() {
+  try {
+    const { rows } = await client.query(
+      `SELECT * FROM tags;`
+    );
+
+    return rows;
+  } catch (error) {
+    console.log ("Error in Get All Tags Function.")
+    throw error;
+  }
+}
+
 async function getAllPosts() {
   try {
     const { rows: postIds } = await client.query(`
@@ -330,5 +343,6 @@ module.exports = {
   getUserById,
   addTagsToPost,
   createTags,
-  getPostsByTagName
+  getPostsByTagName,
+  getAllTags
 };
