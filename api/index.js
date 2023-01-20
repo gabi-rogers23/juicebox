@@ -44,8 +44,8 @@ apiRouter.use((req, res, next) => {
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
-const allPostsRouter = require('./posts');
-apiRouter.use('/posts', allPostsRouter)
+const postsRouter = require('./posts');
+apiRouter.use('/posts', postsRouter)
 
 const tagsRouter = require('./tags');
 apiRouter.use('/tags', tagsRouter)

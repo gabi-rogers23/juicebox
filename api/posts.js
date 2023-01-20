@@ -1,23 +1,44 @@
-
 const express = require('express');
-const allPostsRouter = express.Router();
+const postsRouter = express.Router();
 
-allPostsRouter.use((req, res, next) => {
+postsRouter.use((req, res, next) => {
   console.log("A request is being made to /posts");
 
   next(); 
   
 });
 
-const { getAllPosts } = require('../db');
+const { requireUser } = require('./utils');
+const { createPost } = require('../db')
 
-allPostsRouter.get('/', async (req, res) => {
-  const posts = await getAllPosts();
+postsRouter.post('/', requireUser, async (req, res, next) => {
+  const { title, content, tags = "" } = req.body;
 
-  res.send({
-    posts
-  });
+  const tagArr = tags.trim().split(/\s+/)
+  const postData = {};
+
+  // only send the tags if there are some to send
+  if (tagArr.length) {
+    postData.tags = tagArr;
+  }
+
+  try {
+    // add authorId, title, content to postData object
+    postData.authorId = req.user.id
+    postData.title = title
+    postData.content = content
+    
+   // this will create the post and the tags for us
+    const post = await createPost(postData);
+
+    // if the post comes back, res.send({ post });
+    if (post){
+      res.send({ post })
+    }
+    // otherwise, next an appropriate error object 
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
 });
 
-
-module.exports = allPostsRouter;
+module.exports = postsRouter;
