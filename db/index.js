@@ -1,6 +1,8 @@
+const { DATABASE_URL } = process.env
+
 const { Client } = require("pg"); // imports the pg module
 
-const client = new Client("postgres://localhost:5432/juicebox-dev");
+const client = new Client(DATABASE_URL);
 
 async function createUser({ username, password, name, location }) {
   try {
