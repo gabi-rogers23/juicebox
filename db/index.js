@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { DATABASE_URL } = process.env
 
 const { Client } = require("pg"); // imports the pg module
